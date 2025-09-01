@@ -34,11 +34,20 @@ services:
     links:
       - db:database
     environment:
+      # Ganache JSON-RPC 地址
       ETHEREUM_JSONRPC_HTTP_URL: http://host.docker.internal:8545/
       ETHEREUM_JSONRPC_TRACE_URL: http://host.docker.internal:8545/
       ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:8545/
       CHAIN_ID: '1337'
+
+      # 其他 Blockscout 内部访问用
+      SECRET_KEY_BASE: 'secret'
+      DATABASE_URL: 'postgresql://blockscout:blockscout@db:5432/blockscout'
+      NETWORK: 'LocalGanache'
+      SUBNETWORK: 'Test'
+      STATS__CONDITIONAL_START__USER_OPS_PAST_INDEXING_FINISHED__ENABLED: 'false'
       ENABLE_COIN_BALANCE_CATCHUP: 'false'
+
 
   nft_media_handler:
     depends_on:
