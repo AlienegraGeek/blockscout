@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  # 模拟节点 (anvil)
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:latest
+    command: >
+      anvil --host 0.0.0.0 --port 8545 --chain-id 31337
+    ports:
+      - "8545:8545"
+
+  # Blockscout 数据库
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: blockscout
+      POSTGRES_PASSWORD: blockscout
+      POSTGRES_DB: blockscout
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U blockscout"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  # Blockscout
+  blockscout:
+    image: blockscout/blockscout:latest
+    depends_on:
+      - postgres
+      - redis
+      - anvil
+    environment:
+      DATABASE_URL: postgresql://blockscout:blockscout@postgres:5432/blockscout
+      ECTO_USE_SSL: "false"
+      ETHEREUM_JSONRPC_HTTP_URL: http://anvil:8545
+      ETHEREUM_JSONRPC_TRACE_URL: http://anvil:8545
+      ETHEREUM_JSONRPC_WS_URL: ws://anvil:8545
+      CHAIN_ID: "31337"
+      NETWORK: "Local Anvil"
+      SUBNETWORK: "Testnet"
+      COIN: "ETH"
+      MIX_ENV: prod
+    ports:
+      - "4000:4000"
