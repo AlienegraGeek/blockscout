@@ -30,14 +30,15 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
       args:
-        RELEASE_VERSION: 9.0.2
+        RELEASE_VERSION: 9.1.0
     links:
       - db:database
     environment:
-      ETHEREUM_JSONRPC_HTTP_URL: https://sepolia.infura.io/v3/620dcebe14e642338b4463fb7cf9edf2
-      ETHEREUM_JSONRPC_TRACE_URL: https://sepolia.infura.io/v3/620dcebe14e642338b4463fb7cf9edf2
-      ETHEREUM_JSONRPC_WS_URL: wss://sepolia.infura.io/ws/v3/620dcebe14e642338b4463fb7cf9edf2
-      CHAIN_ID: '11155111'
+      ETHEREUM_JSONRPC_HTTP_URL: http://host.docker.internal:8545/
+      ETHEREUM_JSONRPC_TRACE_URL: http://host.docker.internal:8545/
+      ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:8545/
+      CHAIN_ID: '1337'
+      ENABLE_COIN_BALANCE_CATCHUP: 'false'
 
   nft_media_handler:
     depends_on:
