@@ -1,0 +1,102 @@
+npx hardhat console --network localhost
+
+Welcome to Node.js v22.19.0.
+Type ".help" for more information.
+> // 1️⃣ 从 Hardhat 引入 ethers
+undefined
+> const hre = require("hardhat");
+undefined
+> const ethers = hre.ethers;
+undefined
+>
+> // 2️⃣ 获取第一个账户
+undefined
+> let deployer = (await ethers.getSigners())[0];
+undefined
+> console.log("Deployer address:", deployer.address);
+Deployer address: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+undefined
+>
+> // 3️⃣ 查看账户余额（以 ETH 为单位）
+undefined
+> let balance = await deployer.getBalance();
+Uncaught TypeError: deployer.getBalance is not a function
+    at REPL10:1:60
+> console.log("Initial balance:", ethers.formatEther(balance), "ETH");
+Uncaught:
+TypeError: invalid BigNumberish value (argument="value", value=null, code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/errors.ts:691:21)
+    at assert (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/errors.ts:719:25)
+    at assertArgument (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/errors.ts:731:5)
+    at getBigInt (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/maths.ts:113:19)
+    at Function.fromValue (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/fixednumber.ts:572:30)
+    at formatUnits (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/units.ts:55:24)
+    at Proxy.formatEther (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/units.ts:82:12) {
+  code: 'INVALID_ARGUMENT',
+  argument: 'value',
+  value: undefined,
+  shortMessage: 'invalid BigNumberish value'
+}
+>
+> // 4️⃣ 给自己发送 1 ETH
+undefined
+> let tx = await deployer.sendTransaction({
+...     to: deployer.address,
+...     value: ethers.parseEther("1")
+... });
+undefined
+> await tx.wait();
+TransactionReceipt {
+  provider: HardhatEthersProvider {
+    _hardhatProvider: LazyInitializationProviderAdapter {
+      _providerFactory: [AsyncFunction (anonymous)],
+      _emitter: [EventEmitter],
+      _initializingPromise: [Promise],
+      provider: [BackwardsCompatibilityProviderAdapter]
+    },
+    _networkName: 'localhost',
+    _blockListeners: [],
+    _transactionHashListeners: Map(0) {},
+    _eventListeners: []
+  },
+  to: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  contractAddress: null,
+  hash: '0x4e8b579fc2fcc1cc6390f08aebd45b8c6f31d14366fcf73686588054576b2f99',
+  index: 0,
+  blockHash: '0xad565984b2e731f3dbf988e61b9154d82ad97142953e413cb1082f70b110caa0',
+  blockNumber: 1,
+  logsBloom: '0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+  gasUsed: 21000n,
+  blobGasUsed: undefined,
+  cumulativeGasUsed: 21000n,
+  gasPrice: 1107421875n,
+  blobGasPrice: undefined,
+  type: 2,
+  status: 1,
+  root: undefined
+}
+> console.log("Sent 1 ETH to self, tx hash:", tx.hash);
+Sent 1 ETH to self, tx hash: 0x4e8b579fc2fcc1cc6390f08aebd45b8c6f31d14366fcf73686588054576b2f99
+undefined
+>
+> // 5️⃣ 再次查看余额
+undefined
+> let newBalance = await deployer.getBalance();
+Uncaught TypeError: deployer.getBalance is not a function
+    at REPL22:1:66
+> console.log("New balance:", ethers.formatEther(newBalance), "ETH");
+Uncaught:
+TypeError: invalid BigNumberish value (argument="value", value=null, code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/errors.ts:691:21)
+    at assert (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/errors.ts:719:25)
+    at assertArgument (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/errors.ts:731:5)
+    at getBigInt (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/maths.ts:113:19)
+    at Function.fromValue (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/fixednumber.ts:572:30)
+    at formatUnits (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/units.ts:55:24)
+    at Proxy.formatEther (/Users/nateyang/Documents/github/blockscout/hardhat/node_modules/ethers/src.ts/utils/units.ts:82:12) {
+  code: 'INVALID_ARGUMENT',
+  argument: 'value',
+  value: undefined,
+  shortMessage: 'invalid BigNumberish value'
+}
